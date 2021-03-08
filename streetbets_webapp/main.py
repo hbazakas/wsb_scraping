@@ -17,19 +17,12 @@ def index():
 @app.route('/trends')
 def trends():
     #Stock Tickers and Names
-    URL = 'https://stockanalysis.com/stocks/'
-    page = requests.get(URL)
-    soup = BeautifulSoup(page.content, 'lxml')
-    wsb_tickers = soup.find_all('li')
-
+    nasdaq = pd.read_csv('nasdaq_screener_1615222693757.csv')
     wsb_ticker_list = []
     wsb_name_list = []
-
-    for i in wsb_tickers[12:-18]:
-        #print(i.text.split(" - "))
-        wsb_ticker_list.append(i.text.split(" - ")[0])
-        wsb_name_list.append(i.text.split(" - ")[1])
-
+    for i in range(len(nasdaq)):
+        wsb_ticker_list.append(nasdaq.Symbol[i])
+        wsb_name_list.append(" ".join(nasdaq.Name[i].split()[0:-2]))
     #Crypto Tickers and Names
     URL = 'https://coinmarketcap.com/all/views/all/'
     page = requests.get(URL)
@@ -97,8 +90,8 @@ def trends():
                 frequencies.append(0)
 
         wsb_tickers_and_counts = pd.DataFrame([wsb_name_list, wsb_ticker_list, frequencies]).T
-        wsb_tickers_and_counts.columns = ['stock','ticker','frequency']
-        wsb_tickers_and_counts = wsb_tickers_and_counts.sort_values(by = ['frequency'], ascending = False)[0:n]
+        wsb_tickers_and_counts.columns = ['Name','Ticker','Mentions']
+        wsb_tickers_and_counts = wsb_tickers_and_counts.sort_values(by = ['Mentions'], ascending = False)[0:n]
         wsb_tickers_and_counts.index = range(1,n+1)
         return wsb_tickers_and_counts
 
@@ -122,22 +115,16 @@ def trends():
             frequencies.append(freq)
 
         ssb_tickers_and_counts = pd.DataFrame([ssb_name_list, ssb_ticker_list, frequencies]).T
-        ssb_tickers_and_counts.columns = ['stock','ticker','frequency']
-        ssb_tickers_and_counts = ssb_tickers_and_counts.sort_values(by = ['frequency'], ascending = False)[0:n]
+        ssb_tickers_and_counts.columns = ['Name','Ticker','Mentions']
+        ssb_tickers_and_counts = ssb_tickers_and_counts.sort_values(by = ['Mentions'], ascending = False)[0:n]
         ssb_tickers_and_counts.index = range(1,n+1)
         return ssb_tickers_and_counts
 
     wsb = wsb_leaderboard(10,6)
     ssb = ssb_leaderboard(10,6)
 
-    def string_form(df):
-        string_form = "*Ticker, Name: Frequency*\n"
-        for i in range(df.shape[0]):
-            string_form += df.iloc[i].ticker +", "+ df.iloc[i].stock +": "+ str(df.iloc[i].frequency)+"\n"
-        return(string_form)
-
-    return render_template('template.html',  tables=[wsb.to_html(classes='data')], titles=wsb.columns.values,
-                           tables2=[ssb.to_html(classes='data')], titles2=ssb.columns.values)
+    return render_template('template.html',  tables=[wsb.to_html(classes='data'), ssb.to_html(classes='data')],
+    titles=["WallStreetBets", "SatoshiStreetBets"])
 
 if __name__ == '__main__':
     # This is used when running locally only. When deploying to Google App

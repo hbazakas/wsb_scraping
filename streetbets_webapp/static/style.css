@@ -1,0 +1,76 @@
+html{
+  background-color: #99ccff
+}
+
+body {
+  font-family: "helvetica", sans-serif;
+  font-size: 14px;
+  text-align: left;
+}
+
+footer {
+  font-family: "helvetica", sans-serif;
+  font-size: 14px;
+  text-align: left;
+}
+
+
+table, th, td {
+  border: 1px solid black;
+  text-align: left;
+  font-size: 14px;
+  font-family: "helvetica", sans-serif;
+  border-collapse: collapse;
+  overflow: hidden;
+  padding: 0.5rem;
+  table-layout: fixed;
+}
+
+tbody tr{
+  background-color: #e6e6e6
+}
+
+thead tr{
+  background-color: #a6a6a6
+}
+
+h1{
+  font-size: 20px;
+}
+
+
+thead th:nth-child(4n-3) {
+  width: 10%;
+}
+tbody td:nth-child(4n-3) {
+  width: 10%;
+}
+
+thead th:nth-child(4n-2) {
+  width: 60%;
+}
+tbody td:nth-child(4n-2) {
+  width: 60%;
+}
+
+thead th:nth-child(4n-1) {
+  width: 15%;
+}
+tbody td:nth-child(4n-1) {
+  width: 15%;
+}
+
+thead th:nth-child(4n) {
+  width: 15%;
+}
+tbody td:nth-child(4n) {
+  width: 15%;
+}
+
+table {
+  width: 70%;
+}
+
+tbody tr:hover {
+  background-color: #ffff99;
+}

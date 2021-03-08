@@ -3,18 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <title>WallStreetBets Trends</title>
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
+<h1>Top 10 Tickers, WSB and SSB</h1>
+<p>This page uses the last 6 hours of comments from <a href  = 'https://www.reddit.com/r/wallstreetbets/new/'>r/wallstreetbets</a>
+  and <a href = 'https://www.reddit.com/r/satoshistreetbets/new/'>r/satoshistreetbets</a> to rank the 10 most talked about stocks
+  and cryptocurrencies on Reddit right now. Scraping the data and tabulating the top tickers takes about 60 seconds.
+</p>
+<p>
+   These rankings are meant to be used for tracking trends and informing investment decisions.
+   Invest at your own risk.
+</p>
+<br>
+
 {% for table in tables %}
-            {{titles[loop.index]}}
+            {{titles[loop.index0]}}
+            <br>
             {{ table|safe }}
+            <br>
+
 {% endfor %}
 </body>
-<body>
-{% for table2 in tables2 %}
-            {{titles2[loop.index]}}
-            {{ table2|safe }}
-{% endfor %}
-</body>
+
+<footer>
+<p>This page was created by Henry Bazakas in March 2021.
+    If you're interested in how it was built or in Henry's other work, take a look at his
+<a href = 'https://github.com/hbazakas'>Github</a>.
+    If you've made a fortune investing in securities you learned about here, please let him know via a
+<a href = 'https://www.linkedin.com/in/henry-bazakas-471201143/'>LinkedIn</a> message. Thanks for checking out this project!
+</p>
+</footer>
+
 </html>
