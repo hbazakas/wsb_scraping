@@ -75,7 +75,6 @@ def trends():
         comments = comments.split()
         comments_counter = Counter(comments)
         return(comments_counter)
-
     def wsb_leaderboard(n, hours, hot):
         wsb_comments = comments_scraper('wallstreetbets', hours, hot, case_sensitive = True)
 
@@ -91,7 +90,6 @@ def trends():
         wsb_tickers_and_counts = wsb_tickers_and_counts.sort_values(by = ['Mentions'], ascending = False)[0:n]
         wsb_tickers_and_counts.index = range(1,n+1)
         return wsb_tickers_and_counts
-
     def ssb_leaderboard(n, hours, hot):
         ssb_comments = comments_scraper('satoshistreetbets', hours, hot, case_sensitive = True)
 
@@ -116,6 +114,7 @@ def trends():
         ssb_tickers_and_counts = ssb_tickers_and_counts.sort_values(by = ['Mentions'], ascending = False)[0:n]
         ssb_tickers_and_counts.index = range(1,n+1)
         return ssb_tickers_and_counts
+
 
     wsb = wsb_leaderboard(10,6,10)
     ssb = ssb_leaderboard(10,6,10)

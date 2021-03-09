@@ -6,7 +6,6 @@
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-
 <h1>Top 10 Tickers, WSB and SSB</h1>
 <p>This page uses the last 6 hours of comments from <a href  = 'https://www.reddit.com/r/wallstreetbets/new/'>r/wallstreetbets</a>
   and <a href = 'https://www.reddit.com/r/satoshistreetbets/new/'>r/satoshistreetbets</a> to rank the 10 most talked about stocks
@@ -17,27 +16,30 @@
    Invest at your own risk.
 </p>
 <br>
-
 <div class = "grid-container">
 {% for table in tables %}
-
             {{ table|safe }}
-
 {% endfor %}
 </div>
 
 </body>
-
+<br>
 <footer>
-<p>This page was created by Henry Bazakas in March 2021.
-    If you're interested in how it was built or in Henry's other work, take a look at his
-<a href = 'https://github.com/hbazakas'>Github</a>.
-    If you've made a fortune investing in securities you learned about here, please let him know via a
-<a href = 'https://www.linkedin.com/in/henry-bazakas-471201143/'>LinkedIn</a> message. Thanks for checking out this project!
-</p>
-
 <script type="text/javascript" src="https://platform.linkedin.com/badges/js/profile.js" async defer></script>
-<div class="LI-profile-badge"  data-version="v1" data-size="medium" data-locale="en_US" data-type="horizontal" data-theme="light" data-vanity="henry-bazakas-471201143"><a class="LI-simple-link" href='https://www.linkedin.com/in/henry-bazakas-471201143?trk=profile-badge'>Henry Bazakas</a></div>
+<div class = "grid-container-2">
+
+  <p>This page was created by Henry Bazakas in March 2021.
+      If you're interested in how it was built or in Henry's other work, take a look at his
+     <a href = 'https://github.com/hbazakas'>Github</a>.
+      If you've made a fortune investing in securities you learned about here, please let him know via a
+     <a href = 'https://twitter.com/bighenbazakas'>tweet</a> or <a href = 'https://www.linkedin.com/in/henry-bazakas-471201143/'>LinkedIn</a>
+     message. Thanks for checking out this project!
+  </p>
+
+  <div class="LI-profile-badge"  data-version="v1" data-size="medium" data-locale="en_US" data-type="horizontal" data-theme="light" data-vanity="henry-bazakas-471201143"><a class="LI-simple-link" href='https://www.linkedin.com/in/henry-bazakas-471201143?trk=profile-badge'>Henry Bazakas</a></div>
+
+</div>
+
 </footer>
 
 </html>

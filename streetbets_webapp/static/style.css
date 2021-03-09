@@ -82,6 +82,16 @@ tbody tr:hover {
     grid-gap: 20px;
 }
 
+.grid-container-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+}
+
 .LI-profile-badge {
-    background-color: #e6e6e6;
+  background-color: #99ccff;
+}
+
+.LI-simple-link {
+  background-color: #99ccff;
 }
