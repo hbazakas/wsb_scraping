@@ -4,13 +4,13 @@ html{
 
 body {
   font-family: "helvetica", sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   text-align: left;
 }
 
 footer {
   font-family: "helvetica", sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   text-align: left;
 }
 
@@ -18,7 +18,7 @@ footer {
 table, th, td {
   border: 1px solid black;
   text-align: left;
-  font-size: 14px;
+  font-size: 16px;
   font-family: "helvetica", sans-serif;
   border-collapse: collapse;
   overflow: hidden;
@@ -68,9 +68,20 @@ tbody td:nth-child(4n) {
 }
 
 table {
-  width: 70%;
+  width: 100%;
+  align-items: center;
 }
 
 tbody tr:hover {
   background-color: #ffff99;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+}
+
+.LI-profile-badge {
+    background-color: #e6e6e6;
 }

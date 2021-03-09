@@ -3,3 +3,4 @@ praw
 pandas
 bs4
 nltk
+gunicorn
