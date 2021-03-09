@@ -46,15 +46,16 @@ def trends():
         '''Uppercase all stopwords.'''
         stopwords_list[ind] = stopwords_list[ind].upper()
 
-    def comments_scraper(sub, comment_age, case_sensitive = False):
-        '''Function scrapes comments within comment_age hours from 25 hottest posts in chosen subreddit.'''
+    def comments_scraper(sub, comment_age, hot, case_sensitive = False):
         posts = []
-        subreddit = reddit.subreddit(sub) #Uses Reddit API to scrape from chosen subreddit
-        for post in subreddit.hot(limit = 25):
+        subreddit = reddit.subreddit(sub)
+        for post in subreddit.hot(limit = hot):
             posts.append([post.title, post.score, post.id, post.subreddit, post.url, post.num_comments, post.selftext, post.created])
         posts = pd.DataFrame(posts,columns=['title', 'score', 'id', 'subreddit', 'url', 'num_comments', 'body', 'created'])
+
         comment_count = 0
         comments = ""
+
         for post_id in posts.id:
             submission = reddit.submission(id=post_id)
             submission.comments.replace_more(limit=0)
@@ -65,17 +66,18 @@ def trends():
                 if comment_age <=comment_age:
                     comments += comment.body + " "
                     comment_count+=1
-        #Cleaning up comment output
         if case_sensitive == False:
             comments = comments.upper()
-        for character in'$ -.,\n':
+
+        for character in'$ -.,\n!<>':
             comments = comments.replace(character, " ")
+
         comments = comments.split()
         comments_counter = Counter(comments)
         return(comments_counter)
 
-    def wsb_leaderboard(n, hours):
-        wsb_comments = comments_scraper('wallstreetbets', hours, case_sensitive = True)
+    def wsb_leaderboard(n, hours, hot):
+        wsb_comments = comments_scraper('wallstreetbets', hours, hot, case_sensitive = True)
 
         frequencies = []
         for tick in wsb_ticker_list:
@@ -90,8 +92,8 @@ def trends():
         wsb_tickers_and_counts.index = range(1,n+1)
         return wsb_tickers_and_counts
 
-    def ssb_leaderboard(n, hours):
-        ssb_comments = comments_scraper('satoshistreetbets', hours, case_sensitive = True)
+    def ssb_leaderboard(n, hours, hot):
+        ssb_comments = comments_scraper('satoshistreetbets', hours, hot, case_sensitive = True)
 
         frequencies = []
 
@@ -115,8 +117,8 @@ def trends():
         ssb_tickers_and_counts.index = range(1,n+1)
         return ssb_tickers_and_counts
 
-    wsb = wsb_leaderboard(10,6)
-    ssb = ssb_leaderboard(10,6)
+    wsb = wsb_leaderboard(10,6,10)
+    ssb = ssb_leaderboard(10,6,10)
 
     return render_template('template.html',  tables=[wsb.to_html(classes='data'), ssb.to_html(classes='data')],
     titles=["WallStreetBets", "SatoshiStreetBets"])
