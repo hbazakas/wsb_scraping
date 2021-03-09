@@ -10,11 +10,6 @@ from nltk.corpus import stopwords
 app = Flask(__name__)
 
 @app.route('/')
-def index():
-    """Return a friendly HTTP greeting."""
-    return 'WallStreetBets and SatoshiStreetBets Trends'
-
-@app.route('/trends')
 def trends():
     #Stock Tickers and Names
     nasdaq = pd.read_csv('nasdaq_screener_1615222693757.csv')

@@ -1,1 +1,5 @@
 Flask==1.1.2
+praw
+pandas
+bs4
+nltk
