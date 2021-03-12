@@ -5,23 +5,52 @@ import time
 import requests
 from bs4 import BeautifulSoup
 from collections import Counter
-from nltk.corpus import stopwords
+from rq import Queue
+from worker import conn
+from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
+socketio = SocketIO(app)
+
+def loadup_func():
+    print("Task Starting.")
+    wsb_ticker_list = []
+    wsb_name_list = []
+    URL = 'https://stockanalysis.com/stocks/'
+    page = requests.get(URL)
+    soup = BeautifulSoup(page.content, 'lxml')
+    wsb_tickers = soup.find_all('li')
+
+    for i in wsb_tickers[12:-18]:
+        #print(i.text.split(" - "))
+        wsb_ticker_list.append(i.text.split(" - ")[0])
+        wsb_name_list.append(i.text.split(" - ")[1])
+
+    print(len(wsb_ticker_list), len(wsb_name_list))
+    print("Task Complete.")
+    return wsb_ticker_list
 
 @app.route('/')
 def welcome():
-    return("Welcome to my website!")
+    #Landing page for site
+    q = Queue(connection=conn)
+
+    ticks = q.enqueue(loadup_func)
+    print(ticks)
+    print(names)
+
+    return render_template('launch.html')
+
 
 @app.route('/trends')
 def trends():
     #Stock Tickers and Names
-    nasdaq = pd.read_csv('nasdaq_screener_1615222693757.csv')
-    wsb_ticker_list = []
-    wsb_name_list = []
-    for i in range(len(nasdaq)):
-        wsb_ticker_list.append(nasdaq.Symbol[i])
-        wsb_name_list.append(" ".join(nasdaq.Name[i].split()[0:-2]))
+    #nasdaq = pd.read_csv('nasdaq_screener_1615222693757.csv')
+    #wsb_ticker_list = []
+    #wsb_name_list = []
+    #for i in range(len(nasdaq)):
+        #wsb_ticker_list.append(nasdaq.Symbol[i])
+        #wsb_name_list.append(" ".join(nasdaq.Name[i].split()[0:-2]))
     #Crypto Tickers and Names
     URL = 'https://coinmarketcap.com/all/views/all/'
     page = requests.get(URL)
@@ -44,11 +73,9 @@ def trends():
                      client_secret='rH5FP42F__la6jpUdt01BQvZU48WiA',
                      user_agent='WSB_Trends')
 
-    stopwords_list = stopwords.words('english')
 
-    for ind in range(len(stopwords_list)):
-        '''Uppercase all stopwords.'''
-        stopwords_list[ind] = stopwords_list[ind].upper()
+    stopword_df = pd.read_csv('stopwords.csv')
+    stopwords_list = list(stopword_df.word)
 
     def comments_scraper(sub, comment_age, hot, case_sensitive = False):
         posts = []
@@ -126,8 +153,10 @@ def trends():
     return render_template('template.html',  tables=[wsb.to_html(classes='data'), ssb.to_html(classes='data')],
     titles=["WallStreetBets", "SatoshiStreetBets"])
 
+@socketio.on('long-running-event')
+def handle_my_custom_event():
+
+    emit('processing-finished', json.dumps({'data': 'finished processing!'}))
+
 if __name__ == '__main__':
-    # This is used when running locally only. When deploying to Google App
-    # Engine, a webserver process such as Gunicorn will serve the app. This
-    # can be configured by adding an `entrypoint` to app.yaml.
-    app.run(host='127.0.0.1', port=8080, debug=True)
+    socketio.run(app)
